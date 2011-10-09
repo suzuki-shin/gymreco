@@ -4,6 +4,7 @@ Titanium.UI.setBackgroundColor('#000');
 // create tab group
 var tabGroup = Titanium.UI.createTabGroup();
 
+var form_vals = [];
 
 // create base UI tab and root window
 var win1 = Titanium.UI.createWindow({
@@ -35,6 +36,13 @@ var label1r = Titanium.UI.createLabel({
     left:250,
     top:50
 });
+var rec = Ti.UI.createButton({
+    title:'決定',
+    height:5
+});
+// rec.addEventListener('click', function(e) {
+//     rec.blur();
+// });
 var form1 = Ti.UI.createTextField({
     color:'#333',
     hintText:'',
@@ -43,9 +51,19 @@ var form1 = Ti.UI.createTextField({
     left:140,
     top:50,
     borderStyle:Ti.UI.INPUT_BORDERSTYLE_ROUNDED,
+    keyboardToolbar:[rec],
     keyboardType:Ti.UI.KEYBOARD_NUMBER_PAD,
     returnKeyType:Ti.UI.RETURNKEY_DEFAULT
 });
+win1.add(label1l);
+win1.add(label1r);
+win1.add(form1);
+form1.addEventListener('blur', function(e){
+    Ti.API.info(e.value);
+    form_vals.push({type:1, value:e.value});
+//     form1.blur();
+});
+
 
 var label2l = Titanium.UI.createLabel({
 	color:'#999',
@@ -78,6 +96,15 @@ var form2 = Ti.UI.createTextField({
     keyboardType:Ti.UI.KEYBOARD_NUMBER_PAD,
     returnKeyType:Ti.UI.RETURNKEY_DEFAULT
 });
+form2.addEventListener('blur', function(e){
+    Ti.API.info(e.value);
+    form_vals.push({type:2, value:e.value});
+});
+
+
+win1.add(label2l);
+win1.add(label2r);
+win1.add(form2);
 
 var label3l = Titanium.UI.createLabel({
 	color:'#999',
@@ -110,6 +137,14 @@ var form3 = Ti.UI.createTextField({
     keyboardType:Ti.UI.KEYBOARD_NUMBER_PAD,
     returnKeyType:Ti.UI.RETURNKEY_DEFAULT
 });
+form3.addEventListener('blur', function(e){
+    Ti.API.info(e.value);
+    form_vals.push({type:3, value:e.value});
+});
+
+win1.add(label3l);
+win1.add(label3r);
+win1.add(form3);
 
 var rec_button = Ti.UI.createButton({
     title:'記録',
@@ -121,20 +156,26 @@ var rec_button = Ti.UI.createButton({
 });
 rec_button.addEventListener('click', function(e) {
     var dt = new Date();
-    var now = dt.getFullYear() + '-' + dt.getMonth() + '-' + dt.getDate()
-            + ' ' + dt.getHours() + ':' + dt.getMinutes() + ':' + dt.getSeconds();
+    var now = dt.getFullYear() + '-' +
+            dt.getMonth() + '-' +
+            dt.getDate() + ' ' +
+            dt.getHours() + ':' +
+            dt.getMinutes() + ':' +
+            dt.getSeconds();
     alert(now);
     var db = Ti.Database.open('gymreco');
-//     db.execute('drop table TRAINNINGS');
-    db.execute('CREATE TABLE IF NOT EXISTS TRAINNINGS (id INTEGER, type INTEGER, value INTEGER, created_at TEXT)');
-    db.execute('INSERT INTO TRAINNINGS (id, type, value, created_at) VALUES (?, ?, ?, ?)', 10, 20, 30, now);
+    db.execute('drop table TRAINNINGS');
+    db.execute('CREATE TABLE IF NOT EXISTS TRAINNINGS (type INTEGER, value INTEGER, created_at TEXT)');
+    form_vals.forEach(function(v){
+//         var next_id = Ti.Database.DB.lastInsertRowId;
+        db.execute('INSERT INTO TRAINNINGS (type, value, created_at) VALUES (?, ?, ?)',
+                   v.type, v.value, now);
+    });
     var rows = db.execute('SELECT * FROM TRAINNINGS');
     while (rows.isValidRow()) {
-        Ti.API.info('ID: ' + rows.fieldByName('id')
-                    + ' TYPE: ' + rows.fieldByName('type')
-                    + ' VALUE: ' + rows.fieldByName('value')
-                    + ' CREATED_AT: ' + rows.fieldByName('created_at')
-                   );
+        Ti.API.info(' TYPE: ' + rows.fieldByName('type') +
+                    ' VALUE: ' + rows.fieldByName('value') +
+                    ' CREATED_AT: ' + rows.fieldByName('created_at'));
         rows.next();
     }
     rows.close();
@@ -143,17 +184,31 @@ rec_button.addEventListener('click', function(e) {
     alert('記録しました');
 });
 
-
-win1.add(label1l);
-win1.add(label1r);
-win1.add(form1);
-win1.add(label2l);
-win1.add(label2r);
-win1.add(form2);
-win1.add(label3l);
-win1.add(label3r);
-win1.add(form3);
 win1.add(rec_button);
+
+
+var select_button = Ti.UI.createButton({
+    title:'記録を見る',
+//     style:Ti.UI.iPhone.SystemButtonStyle.PLAIN,
+    height:35,
+    width:200,
+//     left:140,
+    top:250
+});
+select_button.addEventListener('click', function(e) {
+    var db = Ti.Database.open('gymreco');
+    var rows = db.execute('SELECT * FROM TRAINNINGS');
+    while (rows.isValidRow()) {
+        Ti.API.info('TYPE: ' + rows.fieldByName('type') +
+                    ' VALUE: ' + rows.fieldByName('value') +
+                    ' CREATED_AT: ' + rows.fieldByName('created_at'));
+        rows.next();
+    }
+    rows.close();
+    db.close();
+});
+
+win1.add(select_button);
 
 
 //
@@ -178,7 +233,6 @@ var label2 = Titanium.UI.createLabel({
 });
 
 win2.add(label2);
-
 
 
 //
