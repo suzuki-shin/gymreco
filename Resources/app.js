@@ -1,38 +1,42 @@
-Titanium.UI.setBackgroundColor('#000');
+Ti.UI.setBackgroundColor('#000');
 
-var tabGroup = Titanium.UI.createTabGroup();
+var tabGroup = Ti.UI.createTabGroup();
 
-var win1 = Titanium.UI.createWindow({
+var win1 = Ti.UI.createWindow({
     title:'Gym Reco',
     backgroundColor:'#fff',
     url:'win1.js'
 });
-var tab1 = Titanium.UI.createTab({
+var tab1 = Ti.UI.createTab({
     icon:'KS_nav_views.png',
     title:'recording',
     window:win1
 });
 
-//
-// create controls tab and root window
-//
-var win2 = Titanium.UI.createWindow({
+var win2 = Ti.UI.createWindow({
     title:'Tab 2',
     backgroundColor:'#fff',
     url:'win2.js'
 });
-var tab2 = Titanium.UI.createTab({
+var tab2 = Ti.UI.createTab({
     icon:'KS_nav_ui.png',
     title:'Tab 2',
     window:win2
 });
 
-//
-//  add tabs
-//
+var debug = Ti.UI.createWindow({
+    title:'DEBUG',
+    backgroundColor:'#fff',
+    url:'debug.js'
+});
+var debug = Ti.UI.createTab({
+    icon:'KS_nav_ui.png',
+    title:'DEBUG',
+    window:debug
+});
+
 tabGroup.addTab(tab1);
 tabGroup.addTab(tab2);
+tabGroup.addTab(debug);
 
-
-// open tab group
 tabGroup.open();
