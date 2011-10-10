@@ -1,26 +1,31 @@
 var win1 = Ti.UI.currentWindow;
 var form_vals = [];
 
-var label1l = Ti.UI.createLabel({
+var FORM_HEIGHT = 35;
+var LABELL_LEFT = 15;
+var FORM_LEFT   = 140;
+var LABELR_LEFT = 250;
+
+var default_prop = {
 	color:'#999',
-	text:'ランニング',
 	font:{fontSize:20,fontFamily:'Helvetica Neue'},
 	textAlign:'left',
 	width:'auto',
-    height:35,
-    left:15,
-    top:50
-});
-var label1r = Ti.UI.createLabel({
-	color:'#999',
-	text:'分',
-	font:{fontSize:20,fontFamily:'Helvetica Neue'},
-	textAlign:'left',
-	width:'auto',
-    height:35,
-    left:250,
-    top:50
-});
+    height:FORM_HEIGHT
+};
+
+var label1l_prop = default_prop;
+label1l_prop.text = 'ランニング';
+label1l_prop.left = LABELL_LEFT;
+label1l_prop.top = 10;
+var label1l = Ti.UI.createLabel(label1l_prop);
+
+var label1r_prop = default_prop;
+label1r_prop.text = '分';
+label1r_prop.left = LABELR_LEFT;
+label1r_prop.top = 10;
+var label1r = Ti.UI.createLabel(label1r_prop);
+
 var rec = Ti.UI.createButton({
     title:'決定',
     height:5
@@ -31,10 +36,10 @@ var rec = Ti.UI.createButton({
 var form1 = Ti.UI.createTextField({
     color:'#333',
     hintText:'',
-    height:35,
+    height:FORM_HEIGHT,
     width:100,
-    left:140,
-    top:50,
+    left:FORM_LEFT,
+    top:10,
     borderStyle:Ti.UI.INPUT_BORDERSTYLE_ROUNDED,
     keyboardToolbar:[rec],
     keyboardType:Ti.UI.KEYBOARD_NUMBER_PAD,
