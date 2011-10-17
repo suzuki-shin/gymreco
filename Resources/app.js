@@ -45,5 +45,6 @@ var tab4 = Ti.UI.createTab({
 tabGroup.addTab(tab1);
 tabGroup.addTab(tab2);
 tabGroup.addTab(tab3);
+tabGroup.addTab(tab4);
 
 tabGroup.open();

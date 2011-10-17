@@ -50,7 +50,7 @@ win1.add(label1r);
 win1.add(form1);
 form1.addEventListener('blur', function(e){
     Ti.API.info(e.value);
-    form_vals.push({type:1, value:e.value});
+    form_vals.push({item_id:1, value:e.value});
 //     form1.blur();
 });
 
@@ -88,7 +88,7 @@ var form2 = Ti.UI.createTextField({
 });
 form2.addEventListener('blur', function(e){
     Ti.API.info(e.value);
-    form_vals.push({type:2, value:e.value});
+    form_vals.push({item_id:2, value:e.value});
 });
 
 
@@ -129,7 +129,7 @@ var form3 = Ti.UI.createTextField({
 });
 form3.addEventListener('blur', function(e){
     Ti.API.info(e.value);
-    form_vals.push({type:3, value:e.value});
+    form_vals.push({item_id:3, value:e.value});
 });
 
 win1.add(label3l);
@@ -152,15 +152,15 @@ rec_button.addEventListener('click', function(e) {
     var now =  year + '-' + month + '-' + date;
     alert(now);
     var db = Ti.Database.open('gymreco');
-    db.execute('CREATE TABLE IF NOT EXISTS TRAINNINGS (type INTEGER, value INTEGER, created_at TEXT)');
+    db.execute('CREATE TABLE IF NOT EXISTS trainnings (id INTEGER PRIMARY KEY AUTOINCREMENT, item_id INTEGER, value INTEGER, created_at TEXT)');
     form_vals.forEach(function(v){
 //         var next_id = Ti.Database.DB.lastInsertRowId;
-        db.execute('INSERT INTO TRAINNINGS (type, value, created_at) VALUES (?, ?, ?)',
-                   v.type, v.value, now);
+        db.execute('INSERT INTO trainnings (item_id, value, created_at) VALUES (?, ?, ?)',
+                   v.item_id, v.value, now);
     });
-    var rows = db.execute('SELECT * FROM TRAINNINGS');
+    var rows = db.execute('SELECT * FROM trainnings');
     while (rows.isValidRow()) {
-        Ti.API.info(' TYPE: ' + rows.fieldByName('type') +
+        Ti.API.info(' ITEM_ID: ' + rows.fieldByName('item_id') +
                     ' VALUE: ' + rows.fieldByName('value') +
                     ' CREATED_AT: ' + rows.fieldByName('created_at'));
         rows.next();
