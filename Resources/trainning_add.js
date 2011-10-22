@@ -68,6 +68,14 @@ form2.addEventListener('blur', function(e){
 });
 
 rec_button.addEventListener('click', function(e) {
+    if (! form_val.name || ! form_val.unit_name) {
+        var dialog = Titanium.UI.createAlertDialog();
+//         dialog.setTitle('アラートのテスト');
+        dialog.setMessage('Input new item name & unit_name.');
+        dialog.show();
+        return;
+    }
+
     var db = Ti.Database.open('gymreco');
     db.execute('INSERT INTO items (name, unit_name) VALUES (?, ?)', form_val.name, form_val.unit_name);
     var rows = db.execute('SELECT * FROM items');
