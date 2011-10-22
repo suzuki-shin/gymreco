@@ -75,7 +75,7 @@ var rec_button = Ti.UI.createButton({
 rec_button.addEventListener('click', function(e) {
     var db = Ti.Database.open('gymreco');
     db.execute('CREATE TABLE IF NOT EXISTS items (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, unit_name TEXT)');
-                                db.execute('INSERT INTO items (name, unit_name) VALUES (?, ?)', form_val.name, form_val.unit_name);
+    db.execute('INSERT INTO items (name, unit_name) VALUES (?, ?)', form_val.name, form_val.unit_name);
     var rows = db.execute('SELECT * FROM items');
     while (rows.isValidRow()) {
         Ti.API.info(' ID: ' + rows.fieldByName('id') +
