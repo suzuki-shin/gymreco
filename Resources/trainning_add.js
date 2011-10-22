@@ -36,11 +36,6 @@ var form1 = Ti.UI.createTextField({
 });
 win.add(label1l);
 win.add(form1);
-form1.addEventListener('blur', function(e){
-    Ti.API.info(e.value);
-    form_val.name = e.value;
-    form1.blur();
-});
 
 var label2l_prop = default_prop;
 label2l_prop.text = '単位名';
@@ -61,14 +56,9 @@ var form2 = Ti.UI.createTextField({
 });
 win.add(label2l);
 win.add(form2);
-form2.addEventListener('blur', function(e){
-    Ti.API.info(e.value);
-    form_val.unit_name = e.value;
-    form2.blur();
-});
 
 rec_button.addEventListener('click', function(e) {
-    if (! form_val.name || ! form_val.unit_name) {
+    if (! form1.value || ! form2.value) {
         var dialog = Titanium.UI.createAlertDialog();
 //         dialog.setTitle('アラートのテスト');
         dialog.setMessage('Input new item name & unit_name.');
@@ -77,7 +67,7 @@ rec_button.addEventListener('click', function(e) {
     }
 
     var db = Ti.Database.open('gymreco');
-    db.execute('INSERT INTO items (name, unit_name) VALUES (?, ?)', form_val.name, form_val.unit_name);
+    db.execute('INSERT INTO items (name, unit_name) VALUES (?, ?)', form1.value, form2.value);
     var rows = db.execute('SELECT * FROM items');
     while (rows.isValidRow()) {
         Ti.API.info(' ID: ' + rows.fieldByName('id') +
@@ -85,6 +75,14 @@ rec_button.addEventListener('click', function(e) {
                     ' UNIT_NAME: ' + rows.fieldByName('unit_name'));
         rows.next();
     }
+    form1.value = null;
+    form2.value = null;
     rows.close();
     db.close();
+
+    var win = Ti.UI.createWindow({
+        url: 'win_config.js',
+        title:'config'
+    });
+	Ti.UI.currentTab.open(win,{animated:false});
 });
