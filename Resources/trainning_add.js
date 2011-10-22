@@ -67,7 +67,7 @@ rec_button.addEventListener('click', function(e) {
     }
 
     var db = Ti.Database.open('gymreco');
-    db.execute('INSERT INTO items (name, unit_name) VALUES (?, ?)', form1.value, form2.value);
+    db.execute('INSERT INTO items (name, unit_name, status) VALUES (?, ?, ?)', form1.value, form2.value, 1);
     var rows = db.execute('SELECT * FROM items');
     while (rows.isValidRow()) {
         Ti.API.info(' ID: ' + rows.fieldByName('id') +

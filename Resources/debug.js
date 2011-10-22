@@ -71,7 +71,7 @@ var drop_table2 = Ti.UI.createButton({
 drop_table2.addEventListener('click', function(e) {
     var db = Ti.Database.open('gymreco');
     db.execute('drop table items');
-    db.execute('CREATE TABLE items (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, unit_name TEXT)');
+    db.execute('CREATE TABLE items (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, unit_name TEXT, status INTEGER)');
     db.close();
     alert('テーブルを作り直しました');
 });

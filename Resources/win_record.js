@@ -20,7 +20,7 @@ var default_prop = {
 
 var items = [];
 var db = Ti.Database.open('gymreco');
-var rows = db.execute('SELECT * FROM items ORDER BY id DESC');
+var rows = db.execute('SELECT * FROM items WHERE status > 0 ORDER BY id DESC');
 for (var i = 0; rows.isValidRow(); i++) {
     items.push({
         id:rows.fieldByName('id'),
