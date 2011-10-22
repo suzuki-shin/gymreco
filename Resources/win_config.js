@@ -1,11 +1,15 @@
 var win = Ti.UI.currentWindow;
+var rec_button = Ti.UI.createButton({title:'new item'});
+rec_button.addEventListener('click', function(e) {
+    var win = Ti.UI.createWindow({
+        url: 'trainning_add.js',
+        title:'new item'
+    });
+	Ti.UI.currentTab.open(win,{animated:true});
+});
+win.rightNavButton = rec_button;
 
-var data = [
-    {title:'新規追加', hasDetail:true, test:'trainning_add.js'}
-//     {title:'トレッドミル', hasDetail:true, test:'view.js'},
-//     {title:'レッグプレス', hasDetail:true, test:'view.js'},
-//     {title:'チェストプレス', hasDetail:true, test:'view.js'}
-];
+var data = [];
 
 var db = Ti.Database.open('gymreco');
 db.execute('CREATE TABLE IF NOT EXISTS items (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, unit_name TEXT)');

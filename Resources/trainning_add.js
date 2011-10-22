@@ -10,7 +10,7 @@ var FORM_LEFT   = 140;
 var LABELR_LEFT = 250;
 
 var default_prop = {
-	color:'#999',
+	color:'#333',
 	font:{fontSize:20,fontFamily:'Helvetica Neue'},
 	textAlign:'left',
 	width:'auto',
