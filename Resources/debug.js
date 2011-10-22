@@ -10,9 +10,9 @@ var view_rec = Ti.UI.createButton({
 });
 view_rec.addEventListener('click', function(e) {
     var db = Ti.Database.open('gymreco');
-    var rows = db.execute('SELECT * FROM TRAINNINGS');
+    var rows = db.execute('SELECT * FROM trainnings');
     while (rows.isValidRow()) {
-        Ti.API.info('TYPE: ' + rows.fieldByName('type') +
+        Ti.API.info('ITEM_ID: ' + rows.fieldByName('item_id') +
                     ' VALUE: ' + rows.fieldByName('value') +
                     ' CREATED_AT: ' + rows.fieldByName('created_at'));
         rows.next();
@@ -48,7 +48,7 @@ win.add(view_items);
 
 // drop table
 var drop_table1 = Ti.UI.createButton({
-    title:'trainningsテーブルを削除する',
+    title:'trainningsテーブルを作り直す',
     height:35,
     width:200,
     top:150
@@ -56,13 +56,14 @@ var drop_table1 = Ti.UI.createButton({
 drop_table1.addEventListener('click', function(e) {
     var db = Ti.Database.open('gymreco');
     db.execute('drop table trainnings');
+    db.execute('CREATE TABLE IF NOT EXISTS trainnings (id INTEGER PRIMARY KEY AUTOINCREMENT, item_id INTEGER, value INTEGER, created_at TEXT)');
     db.close();
-    alert('テーブルを削除しました');
+    alert('テーブルを作り直す');
 });
 win.add(drop_table1);
 
 var drop_table2 = Ti.UI.createButton({
-    title:'itemsテーブルを削除する',
+    title:'itemsテーブルを作り直す',
     height:35,
     width:200,
     top:200
@@ -70,8 +71,9 @@ var drop_table2 = Ti.UI.createButton({
 drop_table2.addEventListener('click', function(e) {
     var db = Ti.Database.open('gymreco');
     db.execute('drop table items');
+    db.execute('CREATE TABLE items (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, unit_name TEXT)');
     db.close();
-    alert('テーブルを削除しました');
+    alert('テーブルを作り直しました');
 });
 win.add(drop_table2);
 

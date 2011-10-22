@@ -16,10 +16,10 @@ var default_prop = {
 
 var data = [];
 var db = Ti.Database.open('gymreco');
-db.execute('CREATE TABLE IF NOT EXISTS items (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, unit_name TEXT)');
 var rows = db.execute('SELECT * FROM items ORDER BY id DESC');
 for (var i = 0; rows.isValidRow(); i++) {
     data.push({
+        id:rows.fieldByName('id'),
         name:rows.fieldByName('name'),
         unit_name:rows.fieldByName('unit_name'),
         top: i * 50 + 10
@@ -63,7 +63,7 @@ data.forEach(function (d) {
     win1.add(form1);
     form1.addEventListener('blur', function(e){
         Ti.API.info(e.value);
-        form_vals.push({item_id:1, value:e.value});
+        form_vals.push({item_id:d.id, value:e.value});
     });
 });
 
@@ -83,7 +83,6 @@ rec_button.addEventListener('click', function(e) {
     var now =  year + '-' + month + '-' + date;
     alert(now);
     var db = Ti.Database.open('gymreco');
-    db.execute('CREATE TABLE IF NOT EXISTS trainnings (id INTEGER PRIMARY KEY AUTOINCREMENT, item_id INTEGER, value INTEGER, created_at TEXT)');
     form_vals.forEach(function (v){
 //         var next_id = Ti.Database.DB.lastInsertRowId;
         db.execute('INSERT INTO trainnings (item_id, value, created_at) VALUES (?, ?, ?)',

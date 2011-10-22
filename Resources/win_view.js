@@ -3,8 +3,7 @@ var win2 = Ti.UI.currentWindow;
 var data = [];
 
 var db = Ti.Database.open('gymreco');
-db.execute('CREATE TABLE IF NOT EXISTS TRAINNINGS (type INTEGER, value INTEGER, created_at TEXT)');
-var rows = db.execute('SELECT created_at FROM TRAINNINGS GROUP BY created_at ORDER BY created_at DESC');
+var rows = db.execute('SELECT created_at FROM trainnings GROUP BY created_at ORDER BY created_at DESC');
 while (rows.isValidRow()) {
     Ti.API.info(' CREATED_AT: ' + rows.fieldByName('created_at'));
     data.push({title:rows.fieldByName('created_at'), hasDetail:true, test:'view.js'});

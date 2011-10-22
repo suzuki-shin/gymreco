@@ -1,20 +1,26 @@
 var win = Ti.UI.currentWindow;
-var names = [
-    'ストレッチ',
-    'ランニング',
-    '腹筋',
-    '背筋'
-];                     // TODO: あとでどこかグローバルな設定に持たせる
-var data = [];
 
 var db = Ti.Database.open('gymreco');
-db.execute('CREATE TABLE IF NOT EXISTS TRAINNINGS (type INTEGER, value INTEGER, created_at TEXT)');
-var rows = db.execute("SELECT * FROM TRAINNINGS WHERE created_at = ?", win.title);
+var item_rows = db.execute('SELECT * FROM items ORDER BY id DESC');
+var items = [];
+for (var i = 0; item_rows.isValidRow(); i++) {
+    items.push({
+        name:item_rows.fieldByName('name'),
+        unit_name:item_rows.fieldByName('unit_name'),
+        top: i * 50 + 10
+    });
+    item_rows.next();
+}
+item_rows.close();
+
+var rows = db.execute("SELECT * FROM trainnings WHERE created_at = ?", win.title);
+var data = [];
 while (rows.isValidRow()) {
     Ti.API.info(' CREATED_AT: ' + rows.fieldByName('created_at') +
-                ' TYPE: ' + rows.fieldByName('type') +
+                ' ITEM_ID: ' + rows.fieldByName('item_id') +
                 ' VALUE: ' + rows.fieldByName('value'));
-    data.push({title:names[rows.fieldByName('type')] + ' ' + rows.fieldByName('value')});
+    var j = rows.fieldByName('item_id') - 1;
+    data.push({title:items[j].name + ' ' + rows.fieldByName('value') + ' ' + items[j].unit_name});
     rows.next();
 }
 rows.close();
