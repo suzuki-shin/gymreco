@@ -14,127 +14,58 @@ var default_prop = {
     height:FORM_HEIGHT
 };
 
-var label1l_prop = default_prop;
-label1l_prop.text = 'ランニング';
-label1l_prop.left = LABELL_LEFT;
-label1l_prop.top = 10;
-var label1l = Ti.UI.createLabel(label1l_prop);
+var data = [];
+var db = Ti.Database.open('gymreco');
+db.execute('CREATE TABLE IF NOT EXISTS items (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, unit_name TEXT)');
+var rows = db.execute('SELECT * FROM items ORDER BY id DESC');
+for (var i = 0; rows.isValidRow(); i++) {
+    data.push({
+        name:rows.fieldByName('name'),
+        unit_name:rows.fieldByName('unit_name'),
+        top: i * 50 + 10
+    });
+    rows.next();
+}
+rows.close();
+db.close();
 
-var label1r_prop = default_prop;
-label1r_prop.text = '分';
-label1r_prop.left = LABELR_LEFT;
-label1r_prop.top = 10;
-var label1r = Ti.UI.createLabel(label1r_prop);
+data.forEach(function (d) {
+    var label1l_prop = default_prop;
+    label1l_prop.text = d.name;
+    label1l_prop.left = LABELL_LEFT;
+    label1l_prop.top = d.top;
+    var label1l = Ti.UI.createLabel(label1l_prop);
 
-var rec = Ti.UI.createButton({
-    title:'決定',
-    height:5
-});
-// rec.addEventListener('click', function(e) {
-//     rec.blur();
-// });
-var form1 = Ti.UI.createTextField({
-    color:'#333',
-    hintText:'',
-    height:FORM_HEIGHT,
-    width:100,
-    left:FORM_LEFT,
-    top:10,
-    borderStyle:Ti.UI.INPUT_BORDERSTYLE_ROUNDED,
-    keyboardToolbar:[rec],
-    keyboardType:Ti.UI.KEYBOARD_NUMBER_PAD,
-    returnKeyType:Ti.UI.RETURNKEY_DEFAULT
-});
-win1.add(label1l);
-win1.add(label1r);
-win1.add(form1);
-form1.addEventListener('blur', function(e){
-    Ti.API.info(e.value);
-    form_vals.push({item_id:1, value:e.value});
-//     form1.blur();
-});
+    var label1r_prop = default_prop;
+    label1r_prop.text = d.unit_name;
+    label1r_prop.left = LABELR_LEFT;
+    label1r_prop.top = d.top;
+    var label1r = Ti.UI.createLabel(label1r_prop);
 
-
-var label2l = Ti.UI.createLabel({
-	color:'#999',
-	text:'腹筋',
-	font:{fontSize:20,fontFamily:'Helvetica Neue'},
-	textAlign:'left',
-	width:'auto',
-    height:35,
-    left:15,
-    top:100
+    var rec = Ti.UI.createButton({
+        title:'決定',
+        height:5
+    });
+    var form1 = Ti.UI.createTextField({
+        color:'#333',
+        hintText:'',
+        height:FORM_HEIGHT,
+        width:100,
+        left:FORM_LEFT,
+        top:d.top,
+        borderStyle:Ti.UI.INPUT_BORDERSTYLE_ROUNDED,
+        keyboardToolbar:[rec],
+        keyboardType:Ti.UI.KEYBOARD_NUMBER_PAD,
+        returnKeyType:Ti.UI.RETURNKEY_DEFAULT
+    });
+    win1.add(label1l);
+    win1.add(label1r);
+    win1.add(form1);
+    form1.addEventListener('blur', function(e){
+        Ti.API.info(e.value);
+        form_vals.push({item_id:1, value:e.value});
+    });
 });
-var label2r = Ti.UI.createLabel({
-	color:'#999',
-	text:'回',
-	font:{fontSize:20,fontFamily:'Helvetica Neue'},
-	textAlign:'left',
-	width:'auto',
-    height:35,
-    left:250,
-    top:100
-});
-var form2 = Ti.UI.createTextField({
-    color:'#333',
-    hintText:'',
-    height:35,
-    width:100,
-    left:140,
-    top:100,
-    borderStyle:Ti.UI.INPUT_BORDERSTYLE_ROUNDED,
-    keyboardType:Ti.UI.KEYBOARD_NUMBER_PAD,
-    returnKeyType:Ti.UI.RETURNKEY_DEFAULT
-});
-form2.addEventListener('blur', function(e){
-    Ti.API.info(e.value);
-    form_vals.push({item_id:2, value:e.value});
-});
-
-
-win1.add(label2l);
-win1.add(label2r);
-win1.add(form2);
-
-var label3l = Ti.UI.createLabel({
-	color:'#999',
-	text:'背筋',
-	font:{fontSize:20,fontFamily:'Helvetica Neue'},
-	textAlign:'left',
-	width:'auto',
-    height:35,
-    left:15,
-    top:150
-});
-var label3r = Ti.UI.createLabel({
-	color:'#999',
-	text:'回',
-	font:{fontSize:20,fontFamily:'Helvetica Neue'},
-	textAlign:'left',
-	width:'auto',
-    height:35,
-    left:250,
-    top:150
-});
-var form3 = Ti.UI.createTextField({
-    color:'#333',
-    hintText:'',
-    height:35,
-    width:100,
-    left:140,
-    top:150,
-    borderStyle:Ti.UI.INPUT_BORDERSTYLE_ROUNDED,
-    keyboardType:Ti.UI.KEYBOARD_NUMBER_PAD,
-    returnKeyType:Ti.UI.RETURNKEY_DEFAULT
-});
-form3.addEventListener('blur', function(e){
-    Ti.API.info(e.value);
-    form_vals.push({item_id:3, value:e.value});
-});
-
-win1.add(label3l);
-win1.add(label3r);
-win1.add(form3);
 
 var rec_button = Ti.UI.createButton({
     title:'記録',
@@ -153,7 +84,7 @@ rec_button.addEventListener('click', function(e) {
     alert(now);
     var db = Ti.Database.open('gymreco');
     db.execute('CREATE TABLE IF NOT EXISTS trainnings (id INTEGER PRIMARY KEY AUTOINCREMENT, item_id INTEGER, value INTEGER, created_at TEXT)');
-    form_vals.forEach(function(v){
+    form_vals.forEach(function (v){
 //         var next_id = Ti.Database.DB.lastInsertRowId;
         db.execute('INSERT INTO trainnings (item_id, value, created_at) VALUES (?, ?, ?)',
                    v.item_id, v.value, now);
