@@ -1,4 +1,7 @@
 var win = Ti.UI.currentWindow;
+var rec_button = Ti.UI.createButton({title:'record'});
+win.rightNavButton = rec_button;
+
 var form_val = {name:'', unit_name:'回'};
 
 var FORM_HEIGHT = 35;
@@ -64,17 +67,8 @@ form2.addEventListener('blur', function(e){
     form2.blur();
 });
 
-var rec_button = Ti.UI.createButton({
-    title:'登録',
-//     style:Ti.UI.iPhone.SystemButtonStyle.PLAIN,
-    height:35,
-    width:200,
-//     left:140,
-    top:200
-});
 rec_button.addEventListener('click', function(e) {
     var db = Ti.Database.open('gymreco');
-    db.execute('CREATE TABLE IF NOT EXISTS items (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, unit_name TEXT)');
     db.execute('INSERT INTO items (name, unit_name) VALUES (?, ?)', form_val.name, form_val.unit_name);
     var rows = db.execute('SELECT * FROM items');
     while (rows.isValidRow()) {
@@ -86,5 +80,3 @@ rec_button.addEventListener('click', function(e) {
     rows.close();
     db.close();
 });
-
-win.add(rec_button);

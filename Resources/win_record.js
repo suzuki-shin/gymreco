@@ -1,4 +1,7 @@
 var win1 = Ti.UI.currentWindow;
+var rec_button = Ti.UI.createButton({title:'record'});
+win1.rightNavButton = rec_button;
+
 var form_vals = [];
 
 var FORM_HEIGHT = 35;
@@ -42,10 +45,10 @@ data.forEach(function (d) {
     label1r_prop.top = d.top;
     var label1r = Ti.UI.createLabel(label1r_prop);
 
-    var rec = Ti.UI.createButton({
-        title:'決定',
-        height:5
-    });
+//     var rec = Ti.UI.createButton({
+//         title:'決定',
+//         height:5
+//     });
     var form1 = Ti.UI.createTextField({
         color:'#333',
         hintText:'',
@@ -54,7 +57,7 @@ data.forEach(function (d) {
         left:FORM_LEFT,
         top:d.top,
         borderStyle:Ti.UI.INPUT_BORDERSTYLE_ROUNDED,
-        keyboardToolbar:[rec],
+//         keyboardToolbar:[rec],
         keyboardType:Ti.UI.KEYBOARD_NUMBER_PAD,
         returnKeyType:Ti.UI.RETURNKEY_DEFAULT
     });
@@ -67,24 +70,14 @@ data.forEach(function (d) {
     });
 });
 
-var rec_button = Ti.UI.createButton({
-    title:'記録',
-//     style:Ti.UI.iPhone.SystemButtonStyle.PLAIN,
-    height:35,
-    width:200,
-//     left:140,
-    top:200
-});
 rec_button.addEventListener('click', function(e) {
     var dt = new Date();
     var year = dt.getFullYear();
     var month = dt.getMonth() + 1;
     var date = dt.getDate();
     var now =  year + '-' + month + '-' + date;
-    alert(now);
     var db = Ti.Database.open('gymreco');
     form_vals.forEach(function (v){
-//         var next_id = Ti.Database.DB.lastInsertRowId;
         db.execute('INSERT INTO trainnings (item_id, value, created_at) VALUES (?, ?, ?)',
                    v.item_id, v.value, now);
     });
@@ -97,8 +90,4 @@ rec_button.addEventListener('click', function(e) {
     }
     rows.close();
     db.close();
-
-    alert('記録しました');
 });
-
-win1.add(rec_button);
