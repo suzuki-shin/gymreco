@@ -92,13 +92,13 @@ rec_button.addEventListener('click', function(e) {
         db.execute('INSERT INTO trainnings (item_id, value, created_at) VALUES (?, ?, ?)',
                    v.item_id, v.value, now);
     });
-    var rows = db.execute('SELECT * FROM trainnings');
-    while (rows.isValidRow()) {
-        Ti.API.info(' ITEM_ID: ' + rows.fieldByName('item_id') +
-                    ' VALUE: ' + rows.fieldByName('value') +
-                    ' CREATED_AT: ' + rows.fieldByName('created_at'));
-        rows.next();
-    }
+//     var rows = db.execute('SELECT * FROM trainnings');
+//     while (rows.isValidRow()) {
+//         Ti.API.info(' ITEM_ID: ' + rows.fieldByName('item_id') +
+//                     ' VALUE: ' + rows.fieldByName('value') +
+//                     ' CREATED_AT: ' + rows.fieldByName('created_at'));
+//         rows.next();
+//     }
     form_vals = [];
     rows.close();
     db.close();
